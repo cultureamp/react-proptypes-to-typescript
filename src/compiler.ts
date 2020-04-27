@@ -38,18 +38,34 @@ export function compile(
     // `program.getSourceFiles()` will include those imported files,
     // like: `import * as a from './file-a'`.
     // We should only transform current file.
-    const sourceFiles = program.getSourceFiles().filter(sf => path.normalize(sf.fileName) === path.normalize(filePath));
-    const typeChecker = program.getTypeChecker();
 
+    return compileTSSources(
+        program.getSourceFiles().filter(sf => path.normalize(sf.fileName) === path.normalize(filePath))[0],
+        program,
+        factoryFactories,
+        incomingPrettierOptions,
+        compilationOptions,
+    );
+}
+
+export function compileTSSources(
+    sourceFile: ts.SourceFile,
+    program: ts.Program,
+    factoryFactories: TransformFactoryFactory[],
+    incomingPrettierOptions: prettier.Options = {},
+    compilationOptions: CompilationOptions = DEFAULT_COMPILATION_OPTIONS,
+) {
+    const compilerOptions = program.getCompilerOptions();
+    const typeChecker = program.getTypeChecker();
     const result = ts.transform(
-        sourceFiles,
+        sourceFile,
         factoryFactories.map(factoryFactory => factoryFactory(typeChecker), compilerOptions),
     );
 
     if (result.diagnostics && result.diagnostics.length) {
         console.log(
             chalk.yellow(`
-        ======================= Diagnostics for ${filePath} =======================
+        ======================= Diagnostics =======================
         `),
         );
         for (const diag of result.diagnostics) {
@@ -63,10 +79,10 @@ export function compile(
     const printer = ts.createPrinter();
 
     // TODO: fix the index 0 access... What if program have multiple source files?
-    const printed = printer.printNode(ts.EmitHint.SourceFile, result.transformed[0], sourceFiles[0]);
+    const printed = printer.printNode(ts.EmitHint.SourceFile, result.transformed[0], sourceFile);
 
-    const inputSource = fs.readFileSync(filePath, 'utf-8');
-    const prettierOptions = getPrettierOptions(filePath, inputSource, incomingPrettierOptions);
+    const inputSource = sourceFile.getFullText();
+    const prettierOptions = getPrettierOptions(sourceFile.fileName, inputSource, incomingPrettierOptions);
     const options = Object.assign(
         {
             arrowParens: 'avoid',
@@ -87,7 +103,7 @@ export function compile(
         return prettier.format(printed, options);
     } catch (prettierError) {
         if (compilationOptions.ignorePrettierErrors) {
-            console.warn(`Prettier failed for ${filePath} (ignorePrettierErrors is on):`);
+            console.warn(`Prettier failed for ${sourceFile.fileName} (ignorePrettierErrors is on):`);
             console.warn(printed);
             console.warn(prettierError);
             return printed;
