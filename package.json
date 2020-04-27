@@ -19,6 +19,9 @@
         "precommit": "lint-staged",
         "prettier": "prettier --write *.{js,json,css,md,ts,tsx}"
     },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com/"
+    },
     "jest": {
         "transform": {
             ".ts": "<rootDir>/node_modules/ts-jest/preprocessor.js"
@@ -62,8 +65,8 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/piscium2010/react-proptypes-to-typescript.git"
+        "url": "https://github.com/cultureamp/react-proptypes-to-typescript.git"
     },
     "keywords": ["react", "typescript", "proptypes", "transform", "proptype"],
-    "homepage": "https://github.com/piscium2010/react-proptypes-to-typescript"
+    "homepage": "https://github.com/cultureamp/react-proptypes-to-typescript"
 }
