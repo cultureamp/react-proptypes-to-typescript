@@ -64,6 +64,7 @@ function updateReactImportIfNeeded(statement: ts.Statement) {
         newNamedBindingElements.length === 0
             ? undefined
             : ts.updateNamedImports(namedBindings, newNamedBindingElements),
+        false,
     );
 
     return ts.updateImportDeclaration(

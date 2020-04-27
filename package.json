@@ -1,8 +1,9 @@
 {
-    "name": "react-proptypes-to-typescript",
-    "version": "1.0.3",
+    "name": "@cultureamp/react-proptypes-to-typescript",
+    "version": "1.0.4",
     "description": "Convert React code from JavaScript to TypeScript",
-    "main": "dist/cli.js",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "scripts": {
         "pretest": "npm run build",
         "test": "jest",
@@ -24,16 +25,10 @@
         },
         "testRegex": "(/tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
         "testURL": "http://localhost/",
-        "moduleFileExtensions": [
-            "ts",
-            "js"
-        ]
+        "moduleFileExtensions": ["ts", "js"]
     },
     "lint-staged": {
-        "*.{js,json,css,md,ts,tsx}": [
-            "node_modules/.bin/prettier --write",
-            "git add"
-        ]
+        "*.{js,json,css,md,ts,tsx}": ["node_modules/.bin/prettier --write", "git add"]
     },
     "bin": "dist/cli.js",
     "author": "piscium2010 <541032442@qq.com>",
@@ -45,7 +40,7 @@
         "glob": "^7.1.2",
         "lodash": "^4.17.11",
         "prettier": "^1.12.1",
-        "typescript": "^3.5.3"
+        "typescript": "^3.8.3"
     },
     "devDependencies": {
         "@types/chalk": "^2.2.0",
@@ -69,12 +64,6 @@
         "type": "git",
         "url": "https://github.com/piscium2010/react-proptypes-to-typescript.git"
     },
-    "keywords": [
-        "react",
-        "typescript",
-        "proptypes",
-        "transform",
-        "proptype"
-    ],
+    "keywords": ["react", "typescript", "proptypes", "transform", "proptype"],
     "homepage": "https://github.com/piscium2010/react-proptypes-to-typescript"
 }

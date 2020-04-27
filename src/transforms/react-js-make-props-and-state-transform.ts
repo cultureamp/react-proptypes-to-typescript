@@ -42,8 +42,9 @@ function visitReactClassDeclaration(
     const className = classDeclaration && classDeclaration.name && classDeclaration.name.getText(sourceFile);
     const propType = getPropsTypeOfReactComponentClass(classDeclaration, sourceFile); // qwert
     const props = getPropsOfReactComponentClass(classDeclaration, sourceFile);
-    const interfaceMembers = _.unionBy([...propType.members, ...props], p =>
-        p.name ? (p.name as ts.Identifier).text : '',
+    const interfaceMembers = _.unionBy(
+        [...propType.members, ...props],
+        p => (p.name ? (p.name as ts.Identifier).text : ''),
     );
     const states = getStatesOfReactComponentClass(classDeclaration, typeChecker);
     const shouldMakePropTypeDeclaration = interfaceMembers.length > 0;
@@ -172,7 +173,7 @@ function getStatesOfReactComponentClass(
     typeChecker: ts.TypeChecker,
 ): ts.TypeNode {
     const members: ts.PropertySignature[] = [];
-    const addMember = (name: ts.Identifier) => {
+    const addMember = (name: ts.Identifier | ts.PrivateIdentifier) => {
         const text = name ? name.text : '';
         if (text && !members.find(m => (m.name as ts.Identifier).text === text)) {
             const type = typeChecker.getTypeAtLocation(name);
@@ -308,16 +309,14 @@ function getPropsOfReactComponentClass(
         names.push(node.name.text);
     });
 
-    const propsSignatures = names
-        .filter(name => name !== 'children')
-        .map(name => {
-            return ts.createPropertySignature(
-                [],
-                name,
-                ts.createToken(ts.SyntaxKind.QuestionToken),
-                ts.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
-                undefined,
-            );
-        });
+    const propsSignatures = names.filter(name => name !== 'children').map(name => {
+        return ts.createPropertySignature(
+            [],
+            name,
+            ts.createToken(ts.SyntaxKind.QuestionToken),
+            ts.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+            undefined,
+        );
+    });
     return propsSignatures;
 }
