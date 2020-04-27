@@ -1,7 +1,7 @@
 import * as ts from 'typescript';
 import * as prettier from 'prettier';
 
-import { compile, CompilationOptions, DEFAULT_COMPILATION_OPTIONS } from './compiler';
+import { compile, CompilationOptions, DEFAULT_COMPILATION_OPTIONS, compileTSSources } from './compiler';
 import { reactJSMakePropsAndStateInterfaceTransformFactoryFactory } from './transforms/react-js-make-props-and-state-transform';
 import { reactRemovePropTypesAssignmentTransformFactoryFactory } from './transforms/react-remove-prop-types-assignment-transform';
 import { reactMovePropTypesToClassTransformFactoryFactory } from './transforms/react-move-prop-types-to-class-transform';
@@ -21,6 +21,7 @@ export {
     reactRemovePropTypesImportTransformFactoryFactory,
     classInstanceVariablesTransformFactoryFactory,
     compile,
+    compileTSSources,
 };
 
 export const allTransforms = [
